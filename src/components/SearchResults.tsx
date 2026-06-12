@@ -31,6 +31,7 @@ export function SearchResults() {
   const router = useRouter();
   const q = params.get("q") ?? "";
   const [data, setData] = useState<{ registry: RegistryHit[]; wiki: WikiHit[] } | null>(null);
+  const [liveErr, setLiveErr] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,7 +43,11 @@ export function SearchResults() {
     setLoading(true);
     fetch(`/api/search?q=${encodeURIComponent(q)}`)
       .then((r) => r.json())
-      .then((j) => !cancelled && setData(j.data))
+      .then((j) => {
+        if (cancelled) return;
+        setData(j.data);
+        setLiveErr(Boolean(j.errors?.length) || j.live === false);
+      })
       .catch(() => !cancelled && setData({ registry: [], wiki: [] }))
       .finally(() => !cancelled && setLoading(false));
     return () => {
@@ -70,9 +75,28 @@ export function SearchResults() {
           ))}
         </div>
       ) : total === 0 ? (
-        <EmptyState icon="🤷" title={`No results for “${q}”`}>
-          Check the spelling, or try a full name. We track public figures with a documented public footprint.
-        </EmptyState>
+        <div className="space-y-4">
+          <EmptyState icon="🤷" title={`No matches listed for “${q}”`}>
+            {liveErr
+              ? "The live lookup didn’t return suggestions just now. You can still open a profile for exactly what you typed:"
+              : "Check the spelling, or try a full name. You can also open a profile for exactly what you typed:"}
+          </EmptyState>
+          <div className="card flex items-center gap-4 p-4">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-surface-3 text-sm font-bold text-faint">
+              {q.trim().split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-fg">{q.trim()}</p>
+              <p className="text-xs text-faint">Live public-records lookup (Wikipedia · FEC · SEC · IRS)</p>
+            </div>
+            <Link
+              href={`/lookup/${encodeURIComponent(q.trim())}`}
+              className="shrink-0 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand/85"
+            >
+              View Profile →
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
           <p className="text-sm text-muted">
