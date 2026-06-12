@@ -3,7 +3,7 @@
 import type { NonprofitRecord } from "@/lib/sources/propublica";
 import type { Organization } from "@/lib/types";
 import { Timestamp } from "../Timestamp";
-import { Card, ErrorNote, Money, OrgTypeBadge, Source } from "../Ui";
+import { Card, ErrorNote, Money, OrgTypeBadge, SkeletonList, Source } from "../Ui";
 import { useApi } from "../useApi";
 
 interface NonprofitsData {
@@ -52,7 +52,7 @@ export function NonprofitsSection({
       <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
         Matching IRS Form 990 filers (live, ProPublica Nonprofit Explorer)
       </h3>
-      {loading && <p className="text-sm text-slate-500">Searching IRS filings…</p>}
+      {loading && <SkeletonList rows={3} />}
       {env?.data?.results.some((r) => r.orgs?.length) ? (
         <ul className="space-y-1 text-sm">
           {env.data.results.flatMap((r) =>

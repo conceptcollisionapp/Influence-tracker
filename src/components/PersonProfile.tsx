@@ -150,7 +150,7 @@ export function PersonProfile({ person, wikiTitle }: { person?: Person; wikiTitl
       <div>
         {tab === "overview" && <OverviewTab person={person} name={bareName} />}
         {tab === "jets" && person && <FlightsSection aircraft={person.aircraft} personName={person.name} />}
-        {tab === "political" && <DonationsSection slug={slug} name={bareName} />}
+        {tab === "political" && <DonationsSection slug={slug} name={bareName} curatedOrgs={person?.organizations ?? []} />}
         {tab === "nonprofits" && (
           <NonprofitsSection slug={slug} name={bareName} curatedOrgs={person?.organizations ?? []} />
         )}

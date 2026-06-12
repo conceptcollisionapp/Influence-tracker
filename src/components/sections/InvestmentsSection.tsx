@@ -3,7 +3,7 @@
 import type { FilingRecord } from "@/lib/sources/sec";
 import type { Organization, Provenance, SourceLink } from "@/lib/types";
 import { Timestamp } from "../Timestamp";
-import { Card, ErrorNote, OrgTypeBadge, Source } from "../Ui";
+import { Card, ErrorNote, OrgTypeBadge, SkeletonList, Source } from "../Ui";
 import { useApi } from "../useApi";
 
 interface InvestmentsData {
@@ -63,7 +63,7 @@ export function InvestmentsSection({
       <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
         Recent SEC ownership filings naming “{name}” (live, EDGAR full-text search)
       </h3>
-      {loading && <p className="text-sm text-slate-500">Searching SEC EDGAR…</p>}
+      {loading && <SkeletonList rows={3} />}
       {env?.data?.filings?.length ? (
         <ul className="space-y-1 text-sm">
           {env.data.filings.map((f, i) => (
