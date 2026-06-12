@@ -31,7 +31,7 @@ export function NonprofitsSection({
       {nonprofits.length > 0 && (
         <ul className="mb-4 space-y-2">
           {nonprofits.map((o) => (
-            <li key={o.id} className="rounded-lg border border-edge bg-panel-2 p-3">
+            <li key={o.id} className="rounded-lg border border-line bg-surface-2 p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium text-white">{o.name}</span>
                 <OrgTypeBadge type={o.type} />
@@ -58,7 +58,7 @@ export function NonprofitsSection({
           {env.data.results.flatMap((r) =>
             (r.orgs ?? []).slice(0, 4).map((o) => (
               <li key={o.ein} className="flex flex-wrap items-baseline gap-2">
-                <a href={o.url} target="_blank" rel="noopener noreferrer" className="text-accent-2 underline">
+                <a href={o.url} target="_blank" rel="noopener noreferrer" className="text-brand-soft underline">
                   {o.name} ↗
                 </a>
                 <span className="text-xs text-slate-500">
@@ -76,7 +76,7 @@ export function NonprofitsSection({
           <p className="text-sm text-slate-400">
             Live IRS data unavailable —{" "}
             <a
-              className="text-accent-2 underline"
+              className="text-brand-soft underline"
               href={`https://projects.propublica.org/nonprofits/search?q=${encodeURIComponent(name)}`}
               target="_blank"
               rel="noopener noreferrer"

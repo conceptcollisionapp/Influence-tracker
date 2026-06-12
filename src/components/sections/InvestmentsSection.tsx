@@ -41,7 +41,7 @@ export function InvestmentsSection({
       {companies.length > 0 && (
         <ul className="mb-4 space-y-2">
           {companies.map((o) => (
-            <li key={o.id} className="rounded-lg border border-edge bg-panel-2 p-3">
+            <li key={o.id} className="rounded-lg border border-line bg-surface-2 p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium text-white">{o.name}</span>
                 {o.ticker && <span className="rounded bg-sky-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-sky-300">{o.ticker}</span>}
@@ -68,8 +68,8 @@ export function InvestmentsSection({
         <ul className="space-y-1 text-sm">
           {env.data.filings.map((f, i) => (
             <li key={i} className="flex flex-wrap items-baseline gap-2">
-              <span className="rounded bg-panel-2 px-1.5 py-0.5 text-[10px] font-semibold text-slate-300">{f.form}</span>
-              <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-accent-2 underline">
+              <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-slate-300">{f.form}</span>
+              <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-brand-soft underline">
                 {f.company} ↗
               </a>
               <span className="text-xs text-slate-500">filed {f.filedAt}</span>

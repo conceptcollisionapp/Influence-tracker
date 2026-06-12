@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 interface RegistryHit {
@@ -15,18 +16,21 @@ interface WikiHit {
   pageUrl: string;
 }
 
-export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
+export function SearchBar({ autoFocus = false, size = "lg" }: { autoFocus?: boolean; size?: "lg" | "md" }) {
   const [q, setQ] = useState("");
   const [registry, setRegistry] = useState<RegistryHit[]>([]);
   const [wiki, setWiki] = useState<WikiHit[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (q.trim().length < 2) {
       setRegistry([]);
       setWiki([]);
+      setTouched(false);
       return;
     }
     const t = setTimeout(async () => {
@@ -37,8 +41,9 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
         setRegistry(json.data?.registry ?? []);
         setWiki(json.data?.wiki ?? []);
         setOpen(true);
+        setTouched(true);
       } catch {
-        /* network hiccup; keep previous results */
+        /* keep previous results on network hiccup */
       } finally {
         setLoading(false);
       }
@@ -54,59 +59,105 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  const hasResults = registry.length > 0 || wiki.length > 0;
+  const showEmpty = touched && !loading && !hasResults && q.trim().length >= 2;
+  const big = size === "lg";
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (registry[0]) router.push(`/person/${registry[0].slug}`);
+    else if (wiki[0]) router.push(`/lookup/${encodeURIComponent(wiki[0].title)}`);
+  }
+
   return (
     <div ref={boxRef} className="relative mx-auto w-full max-w-2xl">
-      <input
-        autoFocus={autoFocus}
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        onFocus={() => (registry.length || wiki.length) && setOpen(true)}
-        placeholder="Search any billionaire, celebrity, or politician…"
-        className="w-full rounded-xl border border-edge bg-panel px-5 py-4 text-lg text-white placeholder-slate-500 shadow-xl shadow-black/30 outline-none transition focus:border-accent"
-      />
-      {loading && (
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 animate-pulse text-xs text-slate-400">searching…</span>
-      )}
-      {open && (registry.length > 0 || wiki.length > 0) && (
-        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-xl border border-edge bg-panel-2 shadow-2xl">
+      <form onSubmit={onSubmit}>
+        <div className="relative">
+          <span className={`pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 ${big ? "text-xl" : "text-base"} text-faint`}>
+            🔍
+          </span>
+          <input
+            autoFocus={autoFocus}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onFocus={() => hasResults && setOpen(true)}
+            placeholder="Search any powerful person, billionaire, celebrity, or politician…"
+            className={`w-full rounded-2xl border border-line bg-surface/90 pl-12 pr-12 text-fg placeholder-faint shadow-2xl shadow-black/40 outline-none ring-brand/0 transition focus:border-brand focus:ring-4 focus:ring-brand/15 ${
+              big ? "py-4 text-base sm:text-lg" : "py-3 text-sm"
+            }`}
+          />
+          {loading && (
+            <span className="absolute right-4 top-1/2 -translate-y-1/2">
+              <span className="block h-4 w-4 animate-spin rounded-full border-2 border-line border-t-brand" />
+            </span>
+          )}
+        </div>
+      </form>
+
+      {open && (hasResults || showEmpty) && (
+        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl border border-line bg-surface-2 shadow-2xl shadow-black/50">
           {registry.length > 0 && (
-            <div>
-              <p className="bg-panel px-4 py-1.5 text-[10px] uppercase tracking-widest text-slate-400">
-                Tracked profiles — full influence dossier
-              </p>
+            <Group label="Tracked profiles · full influence dossier">
               {registry.map((r) => (
-                <Link
-                  key={r.slug}
-                  href={`/person/${r.slug}`}
-                  onClick={() => setOpen(false)}
-                  className="flex items-baseline justify-between gap-3 px-4 py-2.5 hover:bg-panel"
-                >
-                  <span className="font-medium text-white">{r.name}</span>
-                  <span className="truncate text-xs text-slate-400">{r.title}</span>
-                </Link>
+                <Row key={r.slug} href={`/person/${r.slug}`} onPick={() => setOpen(false)} title={r.name} subtitle={r.title} tracked />
               ))}
-            </div>
+            </Group>
           )}
           {wiki.length > 0 && (
-            <div>
-              <p className="bg-panel px-4 py-1.5 text-[10px] uppercase tracking-widest text-slate-400">
-                Live lookup — public records search for anyone
-              </p>
+            <Group label="Live public-records lookup · for anyone">
               {wiki.map((w) => (
-                <Link
-                  key={w.title}
-                  href={`/lookup/${encodeURIComponent(w.title)}`}
-                  onClick={() => setOpen(false)}
-                  className="flex items-baseline justify-between gap-3 px-4 py-2.5 hover:bg-panel"
-                >
-                  <span className="font-medium text-white">{w.title}</span>
-                  <span className="truncate text-xs text-slate-400">{w.description}</span>
-                </Link>
+                <Row key={w.title} href={`/lookup/${encodeURIComponent(w.title)}`} onPick={() => setOpen(false)} title={w.title} subtitle={w.description} />
               ))}
+            </Group>
+          )}
+          {showEmpty && (
+            <div className="px-4 py-6 text-center text-sm text-muted">
+              <div className="mb-1 text-2xl">🤷</div>
+              No matches for “{q}”. Try a full name like <em>Elon Musk</em> or <em>Taylor Swift</em>.
             </div>
           )}
         </div>
       )}
     </div>
+  );
+}
+
+function Group({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="bg-surface px-4 py-2 text-[10px] font-semibold uppercase tracking-widest text-faint">{label}</p>
+      {children}
+    </div>
+  );
+}
+
+function Row({
+  href,
+  title,
+  subtitle,
+  onPick,
+  tracked = false,
+}: {
+  href: string;
+  title: string;
+  subtitle?: string;
+  onPick: () => void;
+  tracked?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onPick}
+      className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface-3"
+    >
+      <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold ${tracked ? "bg-brand/20 text-brand-soft" : "bg-surface-3 text-faint"}`}>
+        {title.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate font-medium text-fg">{title}</span>
+        {subtitle && <span className="block truncate text-xs text-muted">{subtitle}</span>}
+      </span>
+      {tracked && <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-brand-soft">Dossier →</span>}
+    </Link>
   );
 }

@@ -36,9 +36,9 @@ export function DonationsSection({ slug, name }: { slug?: string; name: string }
                   Name-matched records may include other people with the same name — click through to verify.
                 </span>
               </p>
-              <div className="max-h-80 overflow-auto rounded-lg border border-edge">
+              <div className="max-h-80 overflow-auto rounded-lg border border-line">
                 <table className="w-full text-left text-sm">
-                  <thead className="sticky top-0 bg-panel-2 text-xs uppercase tracking-wide text-slate-400">
+                  <thead className="sticky top-0 bg-surface-2 text-xs uppercase tracking-wide text-slate-400">
                     <tr>
                       <th className="px-3 py-2">Date</th>
                       <th className="px-3 py-2">Committee (recipient)</th>
@@ -47,13 +47,13 @@ export function DonationsSection({ slug, name }: { slug?: string; name: string }
                   </thead>
                   <tbody>
                     {d.donations.records.map((r, i) => (
-                      <tr key={i} className="border-t border-edge/60 hover:bg-panel-2/60">
+                      <tr key={i} className="border-t border-line/60 hover:bg-surface-2/60">
                         <td className="whitespace-nowrap px-3 py-1.5 tabular-nums text-slate-400">
                           {r.date ? new Date(r.date).toLocaleDateString() : "—"}
                         </td>
                         <td className="px-3 py-1.5">
                           {r.committeeUrl ? (
-                            <a href={r.committeeUrl} target="_blank" rel="noopener noreferrer" className="text-accent-2 underline">
+                            <a href={r.committeeUrl} target="_blank" rel="noopener noreferrer" className="text-brand-soft underline">
                               {r.committee} ↗
                             </a>
                           ) : (
@@ -85,7 +85,7 @@ export function DonationsSection({ slug, name }: { slug?: string; name: string }
                 {d.lobbying.map((l) =>
                   (l.filings ?? []).slice(0, 3).map((f, i) => (
                     <li key={`${l.client}-${i}`} className="flex flex-wrap items-baseline gap-2">
-                      <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-accent-2 underline">
+                      <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-brand-soft underline">
                         {f.client} ↗
                       </a>
                       <span className="text-slate-400">

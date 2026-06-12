@@ -84,7 +84,7 @@ export function ConnectionGraph({
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <svg width={width} height={height} className="rounded-xl border border-edge bg-ink/60">
+      <svg width={width} height={height} className="rounded-xl border border-line bg-bg/60">
         {simLinks.map((l, i) => {
           const s = positions.get(typeof l.source === "string" ? l.source : l.source.id);
           const t = positions.get(typeof l.target === "string" ? l.target : l.target.id);
@@ -140,7 +140,7 @@ export function ConnectionGraph({
       </svg>
 
       {selected && (
-        <div className="absolute right-3 top-3 w-80 max-w-[90%] rounded-xl border border-edge bg-panel-2/95 p-4 text-sm shadow-2xl backdrop-blur">
+        <div className="absolute right-3 top-3 w-80 max-w-[90%] rounded-xl border border-line bg-surface-2/95 p-4 text-sm shadow-2xl backdrop-blur">
           <div className="mb-1 flex items-start justify-between gap-2">
             <p className="font-semibold text-white">{selected.label}</p>
             <button onClick={() => setSelected(null)} className="text-slate-400 hover:text-white">✕</button>
@@ -149,21 +149,17 @@ export function ConnectionGraph({
           <div className="mb-2 flex flex-wrap gap-2 text-xs">
             {selected.links.map((l) =>
               l.url.startsWith("/") ? (
-                <Link key={l.url} href={l.url} className="text-accent-2 underline">
+                <Link key={l.url} href={l.url} className="text-brand-soft underline">
                   {l.name}
                 </Link>
               ) : (
                 <Source key={l.url} link={l} />
               ),
             )}
-            {selected.kind === "person" ? (
-              <Link href={`/trace/${selected.id}`} className="text-gold underline">Follow the money →</Link>
-            ) : (
-              <Link href={`/trace/${selected.id}`} className="text-gold underline">Follow the money →</Link>
-            )}
+            <Link href={`/trace/${selected.id}`} className="text-gold underline">Follow the money →</Link>
           </div>
           {selectedEdges.length > 0 && (
-            <ul className="max-h-48 space-y-1.5 overflow-auto border-t border-edge pt-2 text-xs text-slate-300">
+            <ul className="max-h-48 space-y-1.5 overflow-auto border-t border-line pt-2 text-xs text-slate-300">
               {selectedEdges.map((e, i) => (
                 <li key={i}>
                   <span className="text-slate-500">{e.from === selected.id ? "→" : "←"}</span>{" "}

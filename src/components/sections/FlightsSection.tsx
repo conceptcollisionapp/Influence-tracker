@@ -16,7 +16,7 @@ function JetCard({ jet }: { jet: Aircraft }) {
   const meta = env?.data?.meta;
 
   return (
-    <div className="rounded-lg border border-edge bg-panel-2 p-4">
+    <div className="rounded-lg border border-line bg-surface-2 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="font-semibold text-white">
@@ -33,7 +33,7 @@ function JetCard({ jet }: { jet: Aircraft }) {
                 ✈ Airborne now
               </span>
             ) : (
-              <span className="rounded-full border border-edge bg-panel px-2.5 py-0.5 text-xs text-slate-400">
+              <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs text-slate-400">
                 Not currently transmitting / on ground
               </span>
             )
@@ -58,12 +58,12 @@ function JetCard({ jet }: { jet: Aircraft }) {
 
       <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
         <Source link={jet.provenance.source} />
-        {live && <a href={live.trackerUrl} target="_blank" rel="noopener noreferrer" className="text-accent-2 underline">Live map ↗</a>}
+        {live && <a href={live.trackerUrl} target="_blank" rel="noopener noreferrer" className="text-brand-soft underline">Live map ↗</a>}
         <a
           href={`https://www.flightaware.com/live/flight/${jet.registration}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-accent-2 underline"
+          className="text-brand-soft underline"
         >
           FlightAware history ↗
         </a>
@@ -81,7 +81,7 @@ export function FlightsSection({ aircraft, personName }: { aircraft: Aircraft[];
           No aircraft publicly tied to {personName} in our registry (some owners use charter or fractional
           programs like NetJets, which aren&apos;t individually attributable).{" "}
           <a
-            className="text-accent-2 underline"
+            className="text-brand-soft underline"
             href={`https://registry.faa.gov/aircraftinquiry/Search/NameResult?nametxt=${encodeURIComponent(personName)}`}
             target="_blank"
             rel="noopener noreferrer"
