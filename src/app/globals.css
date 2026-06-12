@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces — deep, calm slate with a hint of blue */
+  --color-bg: #0a0e1a;
+  --color-surface: #121826;
+  --color-surface-2: #1a2235;
+  --color-surface-3: #222c42;
+  --color-line: #28324a;
+  --color-line-soft: #1f2740;
+
+  /* Text */
+  --color-fg: #eef2fb;
+  --color-muted: #9aa7c2;
+  --color-faint: #6b7896;
+
+  /* Accents */
+  --color-brand: #5b9cff;
+  --color-brand-soft: #8fc0ff;
+  --color-gold: #f0b952;
+  --color-emerald: #34d399;
+  --color-rose: #fb7185;
+  --color-violet: #a78bfa;
+
+  --radius-card: 16px;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(900px 500px at 85% -8%, rgba(91, 156, 255, 0.10), transparent 60%),
+    radial-gradient(700px 500px at 0% 0%, rgba(167, 139, 250, 0.07), transparent 55%),
+    var(--color-bg);
+  background-attachment: fixed;
+  color: var(--color-fg);
+  font-feature-settings: "tnum", "cv01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+/* Reusable surface card */
+.card {
+  background: linear-gradient(180deg, rgba(26, 34, 53, 0.7), rgba(18, 24, 38, 0.7));
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface-2);
+  border-radius: 8px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+/* Thin scrollbars for inner panels */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 8px;
+}
