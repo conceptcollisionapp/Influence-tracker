@@ -35,7 +35,7 @@ export async function searchNonprofits(q: string): Promise<NonprofitRecord[] | u
   return cached(`pp:${q.toLowerCase()}`, TTL.nonprofits, async () => {
     const res = await fetchJson<PpSearchResponse>(
       `https://projects.propublica.org/nonprofits/api/v2/search.json?q=${encodeURIComponent(q)}`,
-      { timeoutMs: 15_000 },
+      { timeoutMs: 8_000 },
     );
     if (!res.ok || !res.data?.organizations) return undefined;
     return res.data.organizations.slice(0, 8).map((o) => {

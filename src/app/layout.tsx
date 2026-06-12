@@ -22,7 +22,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Influence<span className="text-brand">Tracker</span>
               </span>
             </Link>
-            <nav className="ml-auto flex items-center gap-1 text-sm">
+            <form action="/search" className="ml-auto hidden items-center sm:flex">
+              <label className="relative">
+                <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-faint">🔍</span>
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Search a person…"
+                  className="w-44 rounded-lg border border-line bg-surface/80 py-1.5 pl-7 pr-2 text-sm text-fg placeholder-faint outline-none transition focus:w-60 focus:border-brand"
+                />
+              </label>
+            </form>
+            <nav className="flex items-center gap-1 text-sm sm:ml-2">
               <NavLink href="/top">Top 10</NavLink>
               <NavLink href="/network">Network</NavLink>
             </nav>

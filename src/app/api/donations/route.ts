@@ -3,6 +3,7 @@ import { findPerson } from "@/lib/people";
 import { getDonations, getLobbying } from "@/lib/sources/fec";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 20;
 
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;

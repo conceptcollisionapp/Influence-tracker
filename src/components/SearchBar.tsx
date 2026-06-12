@@ -65,8 +65,10 @@ export function SearchBar({ autoFocus = false, size = "lg" }: { autoFocus?: bool
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (registry[0]) router.push(`/person/${registry[0].slug}`);
-    else if (wiki[0]) router.push(`/lookup/${encodeURIComponent(wiki[0].title)}`);
+    const term = q.trim();
+    if (term.length < 2) return;
+    setOpen(false);
+    router.push(`/search?q=${encodeURIComponent(term)}`);
   }
 
   return (
@@ -115,6 +117,15 @@ export function SearchBar({ autoFocus = false, size = "lg" }: { autoFocus?: bool
               <div className="mb-1 text-2xl">🤷</div>
               No matches for “{q}”. Try a full name like <em>Elon Musk</em> or <em>Taylor Swift</em>.
             </div>
+          )}
+          {hasResults && (
+            <Link
+              href={`/search?q=${encodeURIComponent(q.trim())}`}
+              onClick={() => setOpen(false)}
+              className="block border-t border-line bg-surface px-4 py-2.5 text-center text-xs font-medium text-brand-soft transition hover:bg-surface-3"
+            >
+              See all results for “{q.trim()}” →
+            </Link>
           )}
         </div>
       )}

@@ -20,7 +20,12 @@ export async function fetchJson<T>(
     const res = await fetch(url, {
       ...rest,
       signal: controller.signal,
-      headers: { accept: "application/json", ...rest.headers },
+      headers: {
+        accept: "application/json",
+        // Many public APIs (Wikimedia, SEC) want a descriptive UA.
+        "user-agent": SEC_USER_AGENT,
+        ...rest.headers,
+      },
       // Upstream data is cached by our own TTL cache; don't double-cache.
       cache: "no-store",
     });

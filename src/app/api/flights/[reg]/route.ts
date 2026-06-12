@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAircraftMeta, getLiveFlight } from "@/lib/sources/adsb";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 20;
 
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ reg: string }> }) {
   const { reg } = await ctx.params;

@@ -5,6 +5,7 @@ import { getDonations } from "@/lib/sources/fec";
 import { getWikidataNetWorth, getWikiProfile } from "@/lib/sources/wikipedia";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 20;
 
 /**
  * Aggregated profile: curated registry entry + live Wikipedia summary +

@@ -463,6 +463,36 @@ export const PEOPLE: Person[] = [
     ],
     searchAliases: ["Kim Kardashian", "Kimberly Kardashian"],
   },
+  {
+    slug: "nancy-pelosi",
+    name: "Nancy Pelosi",
+    wikipedia: "Nancy_Pelosi",
+    category: "politician",
+    title: "U.S. Representative (CA-11); former Speaker of the House",
+    netWorthUSDBillion: 0.25,
+    netWorthProvenance: curated({
+      name: "OpenSecrets personal finances",
+      url: "https://www.opensecrets.org/personal-finances/nancy-pelosi/net-worth?cid=N00007360",
+    }, "2025-06-01"),
+    aircraft: [],
+    organizations: [
+      pac("nancy-pelosi-for-congress", "Nancy Pelosi for Congress", "Principal campaign committee", "Itemized receipts & disbursements on FEC.gov."),
+      pac("pac-to-the-future", "PAC to the Future", "Leadership PAC", "Pelosi's leadership PAC supporting Democratic candidates."),
+      org(
+        "house-financial-disclosures",
+        "U.S. House Financial Disclosures",
+        "fund",
+        "Annual asset & transaction reports (incl. spouse's equity trades)",
+        [{ name: "House Clerk disclosure search", url: "https://disclosures-clerk.house.gov/PublicDisclosure/FinancialDisclosure" }],
+        { note: "Members of Congress disclose assets and securities trades annually under the STOCK Act." },
+      ),
+    ],
+    connections: [
+      link("george-soros", "Democratic Party committees", "Both rank among the most active publicly disclosed Democratic political donors/fundraisers (FEC records).", { name: "FEC individual contributions", url: "https://www.fec.gov/data/receipts/individual-contributions/?contributor_name=pelosi%2C+nancy" }),
+      link("michael-bloomberg", "Democratic Party committees", "Allied through Democratic Party fundraising and committee giving (FEC records).", { name: "FEC committee data", url: "https://www.fec.gov/data/committees/?q=pelosi" }),
+    ],
+    searchAliases: ["Nancy Pelosi", "Nancy P. Pelosi", "Nancy Patricia Pelosi"],
+  },
 ];
 
 export const PEOPLE_BY_SLUG = new Map(PEOPLE.map((p) => [p.slug, p]));

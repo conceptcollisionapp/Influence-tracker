@@ -49,7 +49,7 @@ export async function searchFilings(personName: string, forms?: string): Promise
     if (forms) params.set("forms", forms);
     const res = await fetchJson<EdgarFtsResponse>(`https://efts.sec.gov/LATEST/search-index?${params.toString()}`, {
       headers: { "User-Agent": SEC_USER_AGENT },
-      timeoutMs: 15_000,
+      timeoutMs: 9_000,
     });
     if (!res.ok || !res.data?.hits?.hits) return undefined;
     return res.data.hits.hits.slice(0, 10).map((h) => {

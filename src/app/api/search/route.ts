@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchRegistry } from "@/lib/people";
+import { computeScore } from "@/lib/score";
 import { searchWikipedia } from "@/lib/sources/wikipedia";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +8,12 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
   if (q.length < 2) {
-    return NextResponse.json({ data: { registry: [], wiki: [] }, fetchedAt: new Date().toISOString(), live: false, sources: [] });
+    return NextResponse.json({
+      data: { registry: [], wiki: [] },
+      fetchedAt: new Date().toISOString(),
+      live: false,
+      sources: [],
+    });
   }
 
   const registry = searchRegistry(q).map((p) => ({
@@ -15,6 +21,9 @@ export async function GET(req: NextRequest) {
     name: p.name,
     title: p.title,
     category: p.category,
+    netWorthUSDBillion: p.netWorthUSDBillion,
+    // Curated score so results cards show a real number instantly.
+    score: computeScore(p).total,
   }));
 
   let wiki: Awaited<ReturnType<typeof searchWikipedia>> = [];

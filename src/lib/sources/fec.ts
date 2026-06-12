@@ -56,7 +56,7 @@ export async function getDonations(name: string, aliases: string[] = []): Promis
     for (const n of names) params.append("contributor_name", n);
     const res = await fetchJson<ScheduleAResponse>(
       `https://api.open.fec.gov/v1/schedules/schedule_a/?${params.toString()}`,
-      { timeoutMs: 15_000 },
+      { timeoutMs: 8_000 },
     );
     if (!res.ok || !res.data?.results) return undefined;
 
@@ -118,7 +118,7 @@ interface LdaResponse {
 export async function getLobbying(clientName: string): Promise<LobbyingFiling[] | undefined> {
   return cached(`lda:${clientName.toLowerCase()}`, TTL.donations, async () => {
     const url = `https://lda.senate.gov/api/v1/filings/?client_name=${encodeURIComponent(clientName)}&ordering=-dt_posted&page_size=10`;
-    const res = await fetchJson<LdaResponse>(url, { timeoutMs: 15_000 });
+    const res = await fetchJson<LdaResponse>(url, { timeoutMs: 8_000 });
     if (!res.ok || !res.data?.results) return undefined;
     return res.data.results.map((f) => ({
       registrant: f.registrant?.name ?? "Unknown registrant",
