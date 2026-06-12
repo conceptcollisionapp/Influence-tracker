@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0b1220;
+  --color-panel: #111a2e;
+  --color-panel-2: #16213a;
+  --color-edge: #233252;
+  --color-accent: #4f8ef7;
+  --color-accent-2: #7cc5ff;
+  --color-gold: #e8b454;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 70% -10%, #16224a 0%, #0b1220 55%) fixed, #0b1220;
+  color: #e6ecf7;
+  font-feature-settings: "tnum";
+}
+
+::selection {
+  background: #4f8ef7;
+  color: #fff;
+}
+
+a {
+  text-underline-offset: 3px;
+}
